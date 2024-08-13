@@ -1,0 +1,4393 @@
+{
+	"info": {
+		"_postman_id": "ca3fa440-dd91-44f2-8d79-9b0149b3b8a6",
+		"name": "trello",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27729604",
+		"_collection_link": "https://bold-space-890917.postman.co/workspace/Lubka~1b4d1be6-b608-4022-abad-40275abf35e3/collection/27729604-ca3fa440-dd91-44f2-8d79-9b0149b3b8a6?action=share&source=collection_link&creator=27729604"
+	},
+	"item": [
+		{
+			"name": "happyPath - create/update/delete board",
+			"item": [
+				{
+					"name": "create new board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is valid object with board id', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response.id).to.exist;\r",
+									"pm.expect(response.id).to.be.a('string');\r",
+									"pm.collectionVariables.set('boardId', response.id);\r",
+									"pm.collectionVariables.set('boardName', response.name)\r",
+									"})\r",
+									"\r",
+									"pm.test('The correct board id was saved as variable', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId');\r",
+									"let boardName = pm.collectionVariables.get('boardName')\r",
+									"console.log(response.id, boardId)\r",
+									"pm.expect(boardId).to.eql(response.id);\r",
+									"pm.expect(boardName).to.eql(response.name)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let nameOfTheBoard = 'Test1 board';\r",
+									"pm.collectionVariables.set('boardName', nameOfTheBoard);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/?name={{boardName}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{boardName}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a created board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('The name of the board is \"Test1\"', ()=>{\r",
+									"let boardName = pm.collectionVariables.get('boardName')\r",
+									"pm.expect(response.name).to.eql(boardName);\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update name of the board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('The name of the board is \"Test2\"', ()=>{\r",
+									"let nameUpdate =  pm.collectionVariables.get('boardName')\r",
+									"pm.expect(response.name).to.eql(nameUpdate);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let updatedName = 'Updated board name';\r",
+									"pm.collectionVariables.set('boardName', updatedName);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/boards/:id?key={{API_key}}&token={{API_token}}&name={{boardName}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{boardName}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update status of the board - closed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('The name of the board is correct', ()=>{\r",
+									"let boardName = pm.collectionVariables.get('boardName')\r",
+									"pm.expect(response.name).to.eql(boardName);\r",
+									"})\r",
+									"\r",
+									"pm.test('Board is correctly closed', ()=>{\r",
+									"let status = response.closed;\r",
+									"let closeStatus = pm.collectionVariables.get('closeStatus');\r",
+									"pm.expect(status).to.eql(closeStatus);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let closeStatus = true;\r",
+									"\r",
+									"pm.collectionVariables.set('closeStatus', closeStatus);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/boards/:id?key={{API_key}}&token={{API_token}}&name={{boardName}}&closed={{closeStatus}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{boardName}}"
+								},
+								{
+									"key": "closed",
+									"value": "{{closeStatus}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update status of the board - open",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{   \r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('The name of the board is correct', ()=>{\r",
+									"let boardName = pm.collectionVariables.get('boardName')\r",
+									"pm.expect(response.name).to.eql(boardName);\r",
+									"})\r",
+									"\r",
+									"pm.test('Board is correctly closed', ()=>{\r",
+									"let status = response.closed;\r",
+									"let closeStatus = pm.collectionVariables.get('closeStatus');\r",
+									"pm.expect(status).to.eql(closeStatus);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let closeStatus = false;\r",
+									"\r",
+									"pm.collectionVariables.set('closeStatus', closeStatus);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/boards/:id?key={{API_key}}&token={{API_token}}&name={{boardName}}&closed=false",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{boardName}}"
+								},
+								{
+									"key": "closed",
+									"value": "false"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200); //chnage\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('The board was successfully deleted', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response).to.haveOwnProperty('_value');\r",
+									"pm.expect(response._value).to.be.null;\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get deleted board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('string');\r",
+									"})\r",
+									"\r",
+									"pm.test('Correct error message was displayed', ()=>{\r",
+									"pm.expect(response).to.eql('The requested resource was not found.');\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "happyPath - create/update/delete list/card/checklist on the board",
+			"item": [
+				{
+					"name": "create new board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"  \r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test('Response is valid object with board id', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response.id).to.exist;\r",
+									"pm.expect(response.id).to.be.a('string');\r",
+									"pm.collectionVariables.set('boardId', response.id);\r",
+									"pm.collectionVariables.set('boardName', response.name)\r",
+									"})\r",
+									"\r",
+									"pm.test('The correct board id was saved as variable', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId');\r",
+									"let boardName = pm.collectionVariables.get('boardName')\r",
+									"pm.expect(boardId).to.eql(response.id);\r",
+									"pm.expect(boardName).to.eql(response.name)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let nameOfTheBoard = 'Test1 board';\r",
+									"pm.collectionVariables.set('boardName', nameOfTheBoard);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/?name={{boardName}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{boardName}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a new list on the board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('The name of the board is correct', ()=>{\r",
+									"let listName = pm.collectionVariables.get('listName')\r",
+									"pm.expect(response.name).to.eql(listName);\r",
+									"})\r",
+									"\r",
+									"pm.test('List was successfully crested', ()=>{\r",
+									"pm.expect(response).haveOwnProperty('id');\r",
+									"pm.collectionVariables.set('listId', response.id);\r",
+									"let listId = pm.collectionVariables.get('listId');\r",
+									"pm.expect(response.id).to.eql(listId);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let listName = 'To do list';\r",
+									"\r",
+									"pm.collectionVariables.set('listName', listName);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/lists?name={{listName}}&idBoard={{boardId}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"lists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{listName}}"
+								},
+								{
+									"key": "idBoard",
+									"value": "{{boardId}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update the name of  created  list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('The name of the board is correct', ()=>{\r",
+									"let listName = pm.collectionVariables.get('listName')\r",
+									"pm.expect(response.name).to.eql(listName);\r",
+									"})\r",
+									"\r",
+									"pm.test('List was successfully crested', ()=>{\r",
+									"pm.expect(response).haveOwnProperty('id');\r",
+									"pm.collectionVariables.set('listId', response.id);\r",
+									"let listId = pm.collectionVariables.get('listId');\r",
+									"pm.expect(response.id).to.eql(listId);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let listName = 'To do list 2';\r",
+									"\r",
+									"pm.collectionVariables.set('listName', listName);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/lists/:id?key={{API_key}}&token={{API_token}}&name={{listName}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"lists",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{listName}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{listId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get the created list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=> {\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test('Name of the list is correct', ()=> {\r",
+									"let listName = pm.collectionVariables.get('listName');\r",
+									"pm.expect(response.name).to.eql(listName);\r",
+									"});\r",
+									"\r",
+									"pm.test('List has correct id attribute', ()=>{\r",
+									"let listId = pm.collectionVariables.get('listId');\r",
+									"pm.expect(response.id).to.eql(listId);\r",
+									"})\r",
+									"\r",
+									"pm.test('List is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId');\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/lists/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"lists",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{listId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "created list is one of the lists on the board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test('Response is an array', ()=>{\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"})\r",
+									"\r",
+									"let createdList;\r",
+									"let listName = pm.collectionVariables.get('listName');\r",
+									"\r",
+									"for (let item of response) {\r",
+									"   \r",
+									"    if(item.name === listName) {\r",
+									"        createdList = item\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.test('List of lists on board contains the new created list', ()=>{\r",
+									"    pm.expect(createdList.name).to.eql(listName)\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/:id/lists?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								":id",
+								"lists"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a new card on the board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('CardId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('cardId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on list', ()=>{\r",
+									"let listId = pm.collectionVariables.get('listId')\r",
+									"pm.expect(response.idList).to.eql(listId);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let cardName = 'New card';\r",
+									"let cardDesc = 'Card details and more...';\r",
+									"\r",
+									"pm.collectionVariables.set('cardName', cardName);\r",
+									"pm.collectionVariables.set('cardDesc', cardDesc);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards?idList={{listId}}&key={{API_key}}&token={{API_token}}&name={{cardName}}&decs={{cardDesc}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards"
+							],
+							"query": [
+								{
+									"key": "idList",
+									"value": "{{listId}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{cardName}}"
+								},
+								{
+									"key": "decs",
+									"value": "{{cardDesc}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update the name  on created card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('CardId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('cardId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on list', ()=>{\r",
+									"let listId = pm.collectionVariables.get('listId')\r",
+									"pm.expect(response.idList).to.eql(listId);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let cardName = 'Updated card';\r",
+									"let cardDesc = 'Card details and more are updated...';\r",
+									"\r",
+									"pm.collectionVariables.set('cardName', cardName);\r",
+									"pm.collectionVariables.set('cardDesc', cardDesc);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards/:id?key={{API_key}}&token={{API_token}}&name={{cardName}}&desc={{cardDesc}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{cardName}}"
+								},
+								{
+									"key": "desc",
+									"value": "{{cardDesc}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{cardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get created card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('Created card has correct cardId', ()=>{\r",
+									"let cardId = pm.collectionVariables.get('cardId');\r",
+									"pm.expect(response.id).to.eql(cardId);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{cardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a new checklist on the card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('Checklist collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('checklistId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The checklist is created on the correct card', ()=>{\r",
+									"let cardId = pm.collectionVariables.get('cardId')\r",
+									"pm.expect(response.idCard).to.eql(cardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('Checklist has correct name', ()=>{\r",
+									"let checklistName = pm.collectionVariables.get('checklistName');\r",
+									"pm.expect(response.name).to.eql(checklistName);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let checklistName = 'New checklist test1';\r",
+									"\r",
+									"pm.collectionVariables.set('checklistName', checklistName);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/checklists?idCard={{cardId}}&key={{API_key}}&token={{API_token}}&name={{checklistName}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"checklists"
+							],
+							"query": [
+								{
+									"key": "idCard",
+									"value": "{{cardId}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{checklistName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update name on the created checklist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"\r",
+									"pm.test('The checklist is created on the correct card', ()=>{\r",
+									"let cardId = pm.collectionVariables.get('cardId')\r",
+									"pm.expect(response.idCard).to.eql(cardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('Checklist has updated name', ()=>{\r",
+									"let checklistName = pm.collectionVariables.get('checklistName');\r",
+									"pm.expect(response.name).to.eql(checklistName);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let checklistName = 'New checklist test2';\r",
+									"\r",
+									"pm.collectionVariables.set('checklistName', checklistName);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/checklists/:id?key={{API_key}}&token={{API_token}}&name={{checklistName}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"checklists",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{checklistName}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{checklistId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a checklist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('Checklist was deleted', ()=>{\r",
+									"pm.expect(response).to.haveOwnProperty('limits');\r",
+									"pm.expect(response.limits).to.eql({})\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/checklists/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"checklists",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{checklistId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get deleted checklist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('string');\r",
+									"})\r",
+									"\r",
+									"pm.test('Correct error message was displayed', ()=>{\r",
+									"pm.expect(response).to.eql('The requested resource was not found.');\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{checklistId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete the card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('Card was deleted', ()=>{\r",
+									"pm.expect(response).to.haveOwnProperty('limits');\r",
+									"pm.expect(response.limits).to.eql({})\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{cardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get deleted card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('string');\r",
+									"})\r",
+									"\r",
+									"pm.test('Correct error message was displayed', ()=>{\r",
+									"pm.expect(response).to.eql('The requested resource was not found.');\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{cardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('The board was successfully deleted', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response).to.haveOwnProperty('_value');\r",
+									"pm.expect(response._value).to.be.null;\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get deleted board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('string');\r",
+									"})\r",
+									"\r",
+									"pm.test('Correct error message was displayed', ()=>{\r",
+									"pm.expect(response).to.eql('The requested resource was not found.');\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "happyPath - create/update/use/delete label",
+			"item": [
+				{
+					"name": "create new board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"  \r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test('Response is valid object with board id', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response.id).to.exist;\r",
+									"pm.expect(response.id).to.be.a('string');\r",
+									"pm.collectionVariables.set('boardId', response.id);\r",
+									"pm.collectionVariables.set('boardName', response.name)\r",
+									"})\r",
+									"\r",
+									"pm.test('The correct board id was saved as variable', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId');\r",
+									"let boardName = pm.collectionVariables.get('boardName')\r",
+									"pm.expect(boardId).to.eql(response.id);\r",
+									"pm.expect(boardName).to.eql(response.name)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let nameOfTheBoard = 'Test1 board';\r",
+									"pm.collectionVariables.set('boardName', nameOfTheBoard);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/?name=New board is created&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "New board is created"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a new list on the board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('The name of the board is correct', ()=>{\r",
+									"let listName = pm.collectionVariables.get('listName')\r",
+									"pm.expect(response.name).to.eql(listName);\r",
+									"})\r",
+									"\r",
+									"pm.test('List was successfully crested', ()=>{\r",
+									"pm.expect(response).haveOwnProperty('id');\r",
+									"pm.collectionVariables.set('listId', response.id);\r",
+									"let listId = pm.collectionVariables.get('listId');\r",
+									"pm.expect(response.id).to.eql(listId);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let listName = 'To do list';\r",
+									"\r",
+									"pm.collectionVariables.set('listName', listName);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/lists?name={{listName}}&idBoard={{boardId}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"lists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{listName}}"
+								},
+								{
+									"key": "idBoard",
+									"value": "{{boardId}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a new card on the board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('CardId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('cardId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on list', ()=>{\r",
+									"let listId = pm.collectionVariables.get('listId')\r",
+									"pm.expect(response.idList).to.eql(listId);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let cardName = 'New card';\r",
+									"let cardDesc = 'Card details and more...';\r",
+									"\r",
+									"pm.collectionVariables.set('cardName', cardName);\r",
+									"pm.collectionVariables.set('cardDesc', cardDesc);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards?idList={{listId}}&key={{API_key}}&token={{API_token}}&name={{cardName}}&decs={{cardDesc}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards"
+							],
+							"query": [
+								{
+									"key": "idList",
+									"value": "{{listId}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{cardName}}"
+								},
+								{
+									"key": "decs",
+									"value": "{{cardDesc}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a new label in the card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('LabelId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('labelId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct color', ()=>{\r",
+									"let labelColor = pm.collectionVariables.get('labelColor')\r",
+									"pm.expect(response.color).to.eql(labelColor);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct name', ()=>{\r",
+									"let labelName = pm.collectionVariables.get('labelName')\r",
+									"pm.expect(response.name).to.eql(labelName);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('Label was not used yet', ()=>{\r",
+									"pm.expect(response.uses).to.eql(0)\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let labelName = 'High priority';\r",
+									"let color = 'red';\r",
+									"pm.collectionVariables.set('labelName', labelName);\r",
+									"pm.collectionVariables.set('labelColor', color);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/labels?name={{labelName}}&color={{labelColor}}&idBoard={{boardId}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"labels"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{labelName}}"
+								},
+								{
+									"key": "color",
+									"value": "{{labelColor}}"
+								},
+								{
+									"key": "idBoard",
+									"value": "{{boardId}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a created label in the card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('LabelId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('labelId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct color', ()=>{\r",
+									"let labelColor = pm.collectionVariables.get('labelColor')\r",
+									"pm.expect(response.color).to.eql(labelColor);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct name', ()=>{\r",
+									"let labelName = pm.collectionVariables.get('labelName')\r",
+									"pm.expect(response.name).to.eql(labelName);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('Label was not used yet', ()=>{\r",
+									"pm.expect(response.uses).to.eql(0)\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/labels/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"labels",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{labelId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update a label name on the created label",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('LabelId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('labelId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct color', ()=>{\r",
+									"let labelColor = pm.collectionVariables.get('labelColor')\r",
+									"pm.expect(response.color).to.eql(labelColor);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct name', ()=>{\r",
+									"let labelName = pm.collectionVariables.get('labelName')\r",
+									"pm.expect(response.name).to.eql(labelName);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('Label was not used yet', ()=>{\r",
+									"pm.expect(response.uses).to.eql(0)\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let labelName = 'Low priority';\r",
+									"\r",
+									"pm.collectionVariables.set('labelName', labelName);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/labels/:id?key={{API_key}}&token={{API_token}}&name={{labelName}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"labels",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{labelName}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{labelId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get the label with a updated name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('LabelId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('labelId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct color', ()=>{\r",
+									"let labelColor = pm.collectionVariables.get('labelColor')\r",
+									"pm.expect(response.color).to.eql(labelColor);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct name', ()=>{\r",
+									"let labelName = pm.collectionVariables.get('labelName')\r",
+									"pm.expect(response.name).to.eql(labelName);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('Label was not used yet', ()=>{\r",
+									"pm.expect(response.uses).to.eql(0)\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/labels/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"labels",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{labelId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update a color on the created label",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let color = 'blue';\r",
+									"\r",
+									"pm.collectionVariables.set('labelColor', color);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('LabelId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('labelId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct color', ()=>{\r",
+									"let labelColor = pm.collectionVariables.get('labelColor')\r",
+									"pm.expect(response.color).to.eql(labelColor);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct name', ()=>{\r",
+									"let labelName = pm.collectionVariables.get('labelName')\r",
+									"pm.expect(response.name).to.eql(labelName);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('Label was not used yet', ()=>{\r",
+									"pm.expect(response.uses).to.eql(0)\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/labels/:id?key={{API_key}}&token={{API_token}}&color={{labelColor}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"labels",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "color",
+									"value": "{{labelColor}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{labelId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get the label with a updated color",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('LabelId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('labelId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct color', ()=>{\r",
+									"let labelColor = pm.collectionVariables.get('labelColor')\r",
+									"pm.expect(response.color).to.eql(labelColor);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label has the correct name', ()=>{\r",
+									"let labelName = pm.collectionVariables.get('labelName')\r",
+									"pm.expect(response.name).to.eql(labelName);\r",
+									"})\r",
+									"\r",
+									"pm.test('The label is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('Label was not used yet', ()=>{\r",
+									"pm.expect(response.uses).to.eql(0)\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/labels/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"labels",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{labelId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add label to the card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('CardId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('cardId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on list', ()=>{\r",
+									"let listId = pm.collectionVariables.get('listId')\r",
+									"pm.expect(response.idList).to.eql(listId);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"let label;\r",
+									"let labelNameVariable = pm.collectionVariables.get('labelName');\r",
+									"for (let item of response.labels) {\r",
+									"    if (item.name === labelNameVariable) {\r",
+									"        label = item;\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.test('Updated label was added to the card', () => {\r",
+									"let color = pm.collectionVariables.get('labelColor');\r",
+									"pm.expect(label.name).to.eql(labelNameVariable);\r",
+									"pm.expect(label.color).to.eql(color);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let cardName = 'New card';\r",
+									"let cardDesc = 'Card details and more...';\r",
+									"\r",
+									"pm.collectionVariables.set('cardName', cardName);\r",
+									"pm.collectionVariables.set('cardDesc', cardDesc);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards?idList={{listId}}&key={{API_key}}&token={{API_token}}&name={{cardName}}&decs={{cardDesc}}&idLabels={{labelId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards"
+							],
+							"query": [
+								{
+									"key": "idList",
+									"value": "{{listId}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{cardName}}"
+								},
+								{
+									"key": "decs",
+									"value": "{{cardDesc}}"
+								},
+								{
+									"key": "idLabels",
+									"value": "{{labelId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get card with added label",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('Created card has correct cardId', ()=>{\r",
+									"let cardId = pm.collectionVariables.get('cardId');\r",
+									"pm.expect(response.id).to.eql(cardId);\r",
+									"})\r",
+									"\r",
+									"let label;\r",
+									"let labelNameVariable = pm.collectionVariables.get('labelName');\r",
+									"for (let item of response.labels) {\r",
+									"    if (item.name === labelNameVariable) {\r",
+									"        label = item;\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.test('Updated label was added to the card', () => {\r",
+									"let color = pm.collectionVariables.get('labelColor');\r",
+									"pm.expect(label.name).to.eql(labelNameVariable);\r",
+									"pm.expect(label.color).to.eql(color);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{cardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove label from the card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('CardId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('cardId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on list', ()=>{\r",
+									"let listId = pm.collectionVariables.get('listId')\r",
+									"pm.expect(response.idList).to.eql(listId);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									"pm.test('Updated label was removed from the card', () => {\r",
+									"pm.expect(response.labels).to.be.empty\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let cardName = 'New card';\r",
+									"let cardDesc = 'Card details and more...';\r",
+									"\r",
+									"pm.collectionVariables.set('cardName', cardName);\r",
+									"pm.collectionVariables.set('cardDesc', cardDesc);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards?idList={{listId}}&key={{API_key}}&token={{API_token}}&name={{cardName}}&decs={{cardDesc}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards"
+							],
+							"query": [
+								{
+									"key": "idList",
+									"value": "{{listId}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{cardName}}"
+								},
+								{
+									"key": "decs",
+									"value": "{{cardDesc}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete the label",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('Response object contains empty limits attribute', ()=>{\r",
+									"pm.expect(response).to.haveOwnProperty('limits');\r",
+									"pm.expect(response.limits).to.eql({})\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let cardName = 'New card';\r",
+									"let cardDesc = 'Card details and more...';\r",
+									"\r",
+									"pm.collectionVariables.set('cardName', cardName);\r",
+									"pm.collectionVariables.set('cardDesc', cardDesc);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/labels/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"labels",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{labelId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('The board was successfully deleted', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response).to.haveOwnProperty('_value');\r",
+									"pm.expect(response._value).to.be.null;\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get deleted board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('string');\r",
+									"})\r",
+									"\r",
+									"pm.test('Correct error message was displayed', ()=>{\r",
+									"pm.expect(response).to.eql('The requested resource was not found.');\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "search_functionality",
+			"item": [
+				{
+					"name": "create new board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"  \r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test('Response is valid object with board id', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response.id).to.exist;\r",
+									"pm.expect(response.id).to.be.a('string');\r",
+									"pm.collectionVariables.set('boardId', response.id);\r",
+									"pm.collectionVariables.set('boardName', response.name)\r",
+									"})\r",
+									"\r",
+									"pm.test('The correct board id was saved as variable', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId');\r",
+									"let boardName = pm.collectionVariables.get('boardName')\r",
+									"pm.expect(boardId).to.eql(response.id);\r",
+									"pm.expect(boardName).to.eql(response.name)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let nameOfTheBoard = 'Test1 board';\r",
+									"pm.collectionVariables.set('boardName', nameOfTheBoard);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/?name={{boardName}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{boardName}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a new list on the board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('The name of the board is correct', ()=>{\r",
+									"let listName = pm.collectionVariables.get('listName')\r",
+									"pm.expect(response.name).to.eql(listName);\r",
+									"})\r",
+									"\r",
+									"pm.test('List was successfully crested', ()=>{\r",
+									"pm.expect(response).haveOwnProperty('id');\r",
+									"pm.collectionVariables.set('listId', response.id);\r",
+									"let listId = pm.collectionVariables.get('listId');\r",
+									"pm.expect(response.id).to.eql(listId);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let listName = 'To do list';\r",
+									"\r",
+									"pm.collectionVariables.set('listName', listName);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/lists?name={{listName}}&idBoard={{boardId}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"lists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{listName}}"
+								},
+								{
+									"key": "idBoard",
+									"value": "{{boardId}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create a new card on the board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('CardId collection variable was created', ()=>{\r",
+									"pm.collectionVariables.set('cardId', response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on list', ()=>{\r",
+									"let listId = pm.collectionVariables.get('listId')\r",
+									"pm.expect(response.idList).to.eql(listId);\r",
+									"})\r",
+									"\r",
+									"pm.test('The card is created on correct board', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId')\r",
+									"pm.expect(response.idBoard).to.eql(boardId);\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"let cardDesc = 'Card details and more...';\r",
+									"let cardName = 'Shopping list';\r",
+									"\r",
+									"pm.collectionVariables.set('cardName', cardName);\r",
+									"pm.collectionVariables.set('cardDesc', cardDesc);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards?idList={{listId}}&key={{API_key}}&token={{API_token}}&name={{cardName}}&decs={{cardDesc}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards"
+							],
+							"query": [
+								{
+									"key": "idList",
+									"value": "{{listId}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{cardName}}"
+								},
+								{
+									"key": "decs",
+									"value": "{{cardDesc}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get created card",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('object');\r",
+									"})\r",
+									"\r",
+									"pm.test('Created card has correct cardId', ()=>{\r",
+									"let cardId = pm.collectionVariables.get('cardId');\r",
+									"pm.expect(response.id).to.eql(cardId);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/cards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"cards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{cardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search valid query on trello",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let query = 'Shopping list';\r",
+									"\r",
+									"pm.collectionVariables.set('query', query);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"const queryArray = response.options.terms;\r",
+									"const resultsArray = response.cards;\r",
+									"let query = pm.collectionVariables.get('query');\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Search query is valid and is added to the response object', ()=>{\r",
+									"for (let item of queryArray) {\r",
+									"pm.expect(query).to.contain(item.text)\r",
+									"}\r",
+									"})\r",
+									"\r",
+									"pm.test('Search query correctly finds the name of the card', ()=>{\r",
+									"pm.expect(response.cards).to.not.be.empty;\r",
+									"for (let item of resultsArray) {\r",
+									"    pm.expect(item.name).to.contain(query)\r",
+									"    console.log(item.name, query)\r",
+									"}\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/search?query={{query}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{{query}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search invalid query on trello",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let invalidQuery = 'fjssklagfaklwhfkajshlasdjfhlfjasd';\r",
+									"\r",
+									"pm.collectionVariables.set('query', invalidQuery);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"const queryArray = response.options.terms;\r",
+									"let query = pm.collectionVariables.get('query');\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('The response text is null', ()=>{\r",
+									"for (let item of queryArray) {\r",
+									"pm.expect(query).to.contain(item.text)\r",
+									"}\r",
+									"}) \r",
+									"\r",
+									"pm.test('Search query correctly displayed no results', ()=>{\r",
+									"pm.expect(response.boards).to.be.empty;\r",
+									"pm.expect(response.organizations).to.be.empty;\r",
+									"pm.expect(response.members).to.be.empty;\r",
+									"pm.expect(response.cards).to.be.empty;\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/search?query={{query}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{{query}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search empty query on trello",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let invalidQuery = '';\r",
+									"\r",
+									"pm.collectionVariables.set('query', invalidQuery);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test('The response has correct error message', ()=>{\r",
+									"pm.expect(response).to.eql('invalid value for query');\r",
+									"})   \r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/search?query={{query}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{{query}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search query with white space on trello",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let invalidQuery = '          ';\r",
+									"\r",
+									"pm.collectionVariables.set('query', invalidQuery);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('The response query array is empty', ()=>{          \r",
+									"pm.expect(response.options.terms).to.be.empty\r",
+									"})   \r",
+									"\r",
+									"pm.test('Search query correctly displayed no results', ()=>{\r",
+									"pm.expect(response.boards).to.be.empty;\r",
+									"pm.expect(response.organizations).to.be.empty;\r",
+									"pm.expect(response.cards).to.be.empty;\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/search?query={{query}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{{query}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search query with single character on trello",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let invalidQuery = 'N';\r",
+									"\r",
+									"pm.collectionVariables.set('query', invalidQuery);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"const queryArray = response.options.terms;\r",
+									"let query = pm.collectionVariables.get('query');    \r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('The response query array is empty', ()=>{   \r",
+									"for (let item of queryArray) {\r",
+									"pm.expect(query).to.contain(item.text)\r",
+									"}\r",
+									"})   \r",
+									"\r",
+									"pm.test('Search query correctly displayed no results', ()=>{\r",
+									"pm.expect(response.boards).to.be.empty;\r",
+									"pm.expect(response.organizations).to.be.empty;\r",
+									"pm.expect(response.cards).to.be.empty;\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/search?query={{query}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{{query}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('The board was successfully deleted', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response).to.haveOwnProperty('_value');\r",
+									"pm.expect(response._value).to.be.null;\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get deleted board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.text();\r",
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is an object', ()=>{\r",
+									"pm.expect(response).to.be.an('string');\r",
+									"})\r",
+									"\r",
+									"pm.test('Correct error message was displayed', ()=>{\r",
+									"pm.expect(response).to.eql('The requested resource was not found.');\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}1"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "move card to different lists",
+			"item": []
+		},
+		{
+			"name": "create boards with valid names",
+			"item": [
+				{
+					"name": "create new board with valid names",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is valid object with board id', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response.id).to.exist;\r",
+									"pm.expect(response.id).to.be.a('string');\r",
+									"pm.collectionVariables.set('boardId', response.id);\r",
+									"pm.collectionVariables.set('boardName', response.name)\r",
+									"})\r",
+									"\r",
+									"pm.test('The correct board id was saved as variable', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId');\r",
+									"let boardName = pm.collectionVariables.get('boardName')\r",
+									"pm.expect(boardId).to.eql(response.id);\r",
+									"pm.expect(boardName).to.eql(response.name)\r",
+									"console.log(response.name)\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"if (pm.collectionVariables.get('changeName') === null) { \r",
+									"    let arr = ['Shopping', '123456', 'Li@#t', 'pp   PP', '   12@P'];\r",
+									"    let nameOfTheBoard = arr.shift();\r",
+									"    pm.collectionVariables.set('changeName', nameOfTheBoard);\r",
+									"    pm.collectionVariables.set('nameOfBoardArr', arr);\r",
+									"    pm.execution.setNextRequest('create new board with valid names');\r",
+									"} \r",
+									"\r",
+									"else if (pm.collectionVariables.get('changeName') !== null && pm.collectionVariables.get('changeName') !== undefined) { \r",
+									"    let arr = pm.collectionVariables.get('nameOfBoardArr');\r",
+									"\r",
+									"    // Check if the array is empty\r",
+									"    if (arr.length === 0) {\r",
+									"        pm.collectionVariables.set('changeName', undefined);\r",
+									"        pm.execution.setNextRequest(null);  // Stop the loop\r",
+									"    } else {\r",
+									"        let nameOfTheBoard = arr.shift();\r",
+									"        pm.collectionVariables.set('nameOfBoardArr', arr);\r",
+									"        pm.collectionVariables.set('changeName', nameOfTheBoard);\r",
+									"\r",
+									"        console.log(pm.collectionVariables.get('nameOfBoardArr'));\r",
+									"        console.log(pm.collectionVariables.get('changeName'));\r",
+									"        pm.execution.setNextRequest('create new board with valid names');\r",
+									"    }\r",
+									"} \r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/?key={{API_key}}&token={{API_token}}&name={{changeName}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								""
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{changeName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "delete all boards",
+			"item": [
+				{
+					"name": "create new board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response is valid object with board id', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response.id).to.exist;\r",
+									"pm.expect(response.id).to.be.a('string');\r",
+									"pm.collectionVariables.set('boardId', response.id);\r",
+									"pm.collectionVariables.set('boardName', response.name)\r",
+									"})\r",
+									"\r",
+									"pm.test('The correct board id was saved as variable', ()=>{\r",
+									"let boardId = pm.collectionVariables.get('boardId');\r",
+									"let boardName = pm.collectionVariables.get('boardName')\r",
+									"console.log(response.id, boardId)\r",
+									"pm.expect(boardId).to.eql(response.id);\r",
+									"pm.expect(boardName).to.eql(response.name)\r",
+									"})\r",
+									"\r",
+									"pm.execution.setNextRequest('get membership of created board');"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let nameOfTheBoard = 'Test1 board';\r",
+									"pm.collectionVariables.set('boardName', nameOfTheBoard);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/?name={{boardName}}&key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{boardName}}"
+								},
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get membership of created board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.collectionVariables.set('memberId', response[0].idMember);\r",
+									"\r",
+									"pm.execution.setNextRequest('get all boards which belongs to the member');"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/:id/memberships?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								":id",
+								"memberships"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all boards which belongs to the member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Set number of boards variable', () =>{\r",
+									"    let num = 0;\r",
+									"    if(response.length !== 0) { \r",
+									"pm.collectionVariables.set('NumberOfBoards', response.length);\r",
+									"pm.collectionVariables.set('boardIdToDelete', response[(response.length)-1].id)\r",
+									" }\r",
+									" else {\r",
+									"    console.log('it is empty');\r",
+									"    pm.collectionVariables.unset('boardIdToDelete');\r",
+									" }\r",
+									"\r",
+									"})\r",
+									"\r",
+									"\r",
+									"if (response.length) {\r",
+									"    pm.execution.setNextRequest('delete all boards');\r",
+									"}\r",
+									"\r",
+									"else {\r",
+									"    pm.execution.setNextRequest(null)\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/members/:id/boards?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"members",
+								":id",
+								"boards"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{memberId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete all boards",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200); \r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('The board was successfully deleted', ()=>{\r",
+									"pm.expect(response).to.be.a('object');\r",
+									"pm.expect(response).to.haveOwnProperty('_value');\r",
+									"pm.expect(response._value).to.be.null;\r",
+									"})\r",
+									"\r",
+									"\r",
+									"pm.execution.setNextRequest('get all boards which belongs to the member');"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/1/boards/:id?key={{API_key}}&token={{API_token}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"1",
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{API_key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{API_token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardIdToDelete}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "API_key",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "API_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "boardId",
+			"value": ""
+		},
+		{
+			"value": "",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "nameUpdate",
+			"value": ""
+		},
+		{
+			"key": "boardName",
+			"value": ""
+		},
+		{
+			"key": "labelName",
+			"value": ""
+		},
+		{
+			"key": "labelColor",
+			"value": ""
+		},
+		{
+			"key": "listName",
+			"value": ""
+		},
+		{
+			"key": "listId",
+			"value": ""
+		},
+		{
+			"key": "cardId",
+			"value": ""
+		},
+		{
+			"key": "labelId",
+			"value": ""
+		},
+		{
+			"key": "cardName",
+			"value": ""
+		},
+		{
+			"key": "cardDesc",
+			"value": ""
+		},
+		{
+			"key": "checklistName",
+			"value": ""
+		},
+		{
+			"key": "checklistId",
+			"value": ""
+		},
+		{
+			"key": "query",
+			"value": ""
+		},
+		{
+			"key": "closeStatus",
+			"value": ""
+		},
+		{
+			"key": "65d87e94b97f342c2c0aa362",
+			"value": null
+		},
+		{
+			"key": "memberId",
+			"value": ""
+		},
+		{
+			"key": "NumberOfBoards",
+			"value": ""
+		},
+		{
+			"key": "nameOfBoardArr",
+			"value": []
+		},
+		{
+			"key": "changeName",
+			"value": null
+		}
+	]
+}
