@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "ca3fa440-dd91-44f2-8d79-9b0149b3b8a6",
-		"name": "trello",
+		"_postman_id": "1857d52d-f11b-4842-a636-bb4a611a38b7",
+		"name": "trello_collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "27729604",
-		"_collection_link": "https://bold-space-890917.postman.co/workspace/Lubka~1b4d1be6-b608-4022-abad-40275abf35e3/collection/27729604-ca3fa440-dd91-44f2-8d79-9b0149b3b8a6?action=share&source=collection_link&creator=27729604"
+		"_collection_link": "https://bold-space-890917.postman.co/workspace/Lubka~1b4d1be6-b608-4022-abad-40275abf35e3/collection/27729604-1857d52d-f11b-4842-a636-bb4a611a38b7?action=share&source=collection_link&creator=27729604"
 	},
 	"item": [
 		{
@@ -3898,19 +3898,15 @@
 									"pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"pm.test('Response is valid object with board id', ()=>{\r",
+									"pm.test('Response is valid', ()=>{\r",
 									"pm.expect(response).to.be.a('object');\r",
-									"pm.expect(response.id).to.exist;\r",
-									"pm.expect(response.id).to.be.a('string');\r",
-									"pm.collectionVariables.set('boardId', response.id);\r",
-									"pm.collectionVariables.set('boardName', response.name)\r",
+									"pm.expect(response.name).to.exist;\r",
+									"pm.expect(response.name).to.be.a('string');\r",
 									"})\r",
 									"\r",
-									"pm.test('The correct board id was saved as variable', ()=>{\r",
-									"let boardId = pm.collectionVariables.get('boardId');\r",
-									"let boardName = pm.collectionVariables.get('boardName')\r",
-									"pm.expect(boardId).to.eql(response.id);\r",
-									"pm.expect(boardName).to.eql(response.name)\r",
+									"pm.test('The response has correct name', ()=>{\r",
+									"let boardName = pm.collectionVariables.get('changeName');\r",
+									"pm.expect(boardName).to.eql(response.name);\r",
 									"console.log(response.name)\r",
 									"})\r",
 									"\r",
@@ -3925,8 +3921,8 @@
 							"script": {
 								"exec": [
 									"\r",
-									"if (pm.collectionVariables.get('changeName') === null) { \r",
-									"    let arr = ['Shopping', '123456', 'Li@#t', 'pp   PP', '   12@P'];\r",
+									"if (!pm.collectionVariables.get('changeName')) { \r",
+									"    let arr = ['Shopping', '123456', 'Li@#t', 'nano@#tp', 'pp   PP', '   12@P'];\r",
 									"    let nameOfTheBoard = arr.shift();\r",
 									"    pm.collectionVariables.set('changeName', nameOfTheBoard);\r",
 									"    pm.collectionVariables.set('nameOfBoardArr', arr);\r",
@@ -3937,10 +3933,10 @@
 									"    let arr = pm.collectionVariables.get('nameOfBoardArr');\r",
 									"\r",
 									"    // Check if the array is empty\r",
-									"    if (arr.length === 0) {\r",
+									"    if ( arr === []) {\r",
 									"        pm.collectionVariables.set('changeName', undefined);\r",
 									"        pm.execution.setNextRequest(null);  // Stop the loop\r",
-									"    } else {\r",
+									"    } else if (arr.length !== 0) {\r",
 									"        let nameOfTheBoard = arr.shift();\r",
 									"        pm.collectionVariables.set('nameOfBoardArr', arr);\r",
 									"        pm.collectionVariables.set('changeName', nameOfTheBoard);\r",
@@ -3949,7 +3945,13 @@
 									"        console.log(pm.collectionVariables.get('changeName'));\r",
 									"        pm.execution.setNextRequest('create new board with valid names');\r",
 									"    }\r",
-									"} \r",
+									"} else if (pm.collectionVariables.get('changeName') === undefined) {\r",
+									"    pm.execution.setNextRequest(null)\r",
+									"   \r",
+									"}\r",
+									"\r",
+									"\r",
+									"\r",
 									"\r",
 									"\r",
 									""
@@ -4291,7 +4293,7 @@
 	"variable": [
 		{
 			"key": "baseURL",
-			"value": "",
+			"value": "https://api.trello.com/",
 			"type": "string"
 		},
 		{
@@ -4368,10 +4370,6 @@
 		{
 			"key": "closeStatus",
 			"value": ""
-		},
-		{
-			"key": "65d87e94b97f342c2c0aa362",
-			"value": null
 		},
 		{
 			"key": "memberId",
